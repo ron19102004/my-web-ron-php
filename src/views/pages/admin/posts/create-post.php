@@ -1,6 +1,6 @@
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . "/ron/src/utils/import.util.php";
-if(!AuthMiddleware::hasRoles([UserRole::ADMIN->name])){
+if(!AuthMiddleware::hasRoles([UserRole::ADMIN])){
     header("Location: /ron/src/views/pages/auth/login/page.php");
     exit();
 }

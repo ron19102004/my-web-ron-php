@@ -58,7 +58,7 @@ require Import::view_layout_path("content/content.php") ?>
             <div class="flex flex-col rounded-lg bg-gray-50   p-4 border " data-aos="fade-up">
                 <p class="text-sm text-gray-600  ">Vai trò</p>
                 <p class="text-lg font-semibold text-gray-800  ">
-                    <?php if (UserRole::ADMIN->name == $user->role): ?>
+                    <?php if (UserRole::ADMIN == $user->role): ?>
                         <a href="<?php echo Import::view_page_path("admin/dashboard/page.php") ?>" class="inline-block text-green-600 bg-green-100 px-3 py-1 rounded font-medium cursor-pointer">Admin</a>
                     <?php else: ?>
                         <a href="" class="inline-block text-green-600 bg-green-100 px-3 py-1 rounded font-medium cursor-pointer">User</a>
