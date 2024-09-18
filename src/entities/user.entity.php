@@ -1,7 +1,7 @@
 <?php
 enum UserRole: string
 {
-    case AMDIN = "ADMIN";
+    case ADMIN = "ADMIN";
     case USER = "USER";
 }
 class User

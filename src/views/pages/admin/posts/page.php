@@ -134,7 +134,7 @@ require Import::view_layout_path("content/content.php") ?>
                             <td class="px-4 py-3 text-ms font-semibold border">
                                 ${post.title}
                             </td>
-                            <td class="px-4 py-3 text-ms font-semibold border">${category}</td>
+                            <td class="px-4 py-3 text-ms font-semibold border">${category.name}</td>
                             <td class="px-4 py-3 text-ms font-semibold border">
                                 <a href="<?php echo Import::view_page_path("user/posts/details.php")?>?slug=${post.slug}">${post.slug}</a>
                             </td>

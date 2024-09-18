@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS users (
         );
 CREATE TABLE IF NOT EXISTS categories(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL,
+    slug TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS posts (
@@ -32,5 +33,5 @@ CREATE TABLE IF NOT EXISTS comments (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (reply_id) REFERENCES comments(id) ON DELETE CASCADE -- Khóa ngoại từ comments chính nó
+    FOREIGN KEY (reply_id) REFERENCES comments(id) ON DELETE SET NULL -- Khóa ngoại từ comments chính nó
 );

@@ -1,5 +1,9 @@
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php";
+if(!AuthMiddleware::hasRoles([UserRole::ADMIN->name])){
+    header("Location: /src/views/pages/auth/login/page.php");
+    exit();
+}
 Import::entities(["category.entity.php"]);
 Import::repositories(["category.repository.php"]);
 

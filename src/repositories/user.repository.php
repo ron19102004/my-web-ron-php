@@ -55,4 +55,27 @@ class UserRepository
         }
         return null;
     }
+    
+    public function findById(int $id): User|null{
+        $conn = Database::connect();
+        $stmt = $conn->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $conn = null;
+        if ($result) {
+            return User::fromArray($result);
+        }
+        return null;
+    }
+    public function updatePassword($id,$password){
+        $conn = Database::connect();
+        $stmt = $conn->prepare("UPDATE users SET password = :password WHERE id = :id");
+        $stmt->bindParam(":password", $password, PDO::PARAM_STR);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $result = $stmt->execute();
+        $conn = null;
+        return $result;
+    }
+    
 }

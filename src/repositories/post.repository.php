@@ -36,7 +36,7 @@ class PostRepository
     {
         $offset = ($page - 1) * 10;
         $conn = Database::connect();
-        $stmt = $conn->prepare("SELECT p.*,c.name FROM posts p
+        $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
         INNER JOIN categories c ON c.id = p.category_id
         WHERE p.category_id = :category_id AND p.hidden = 0 ORDER BY p.id DESC LIMIT 10 OFFSET :offset");
         $stmt->bindParam(":category_id", $category_id, PDO::PARAM_INT);
@@ -48,7 +48,36 @@ class PostRepository
         foreach ($result as $row) {
             array_push($list, [
                 "post" => Post::fromArray($row),
-                "category" => $row["name"],
+                "category" => [
+                    "name" => $row["name"],
+                    "slug" => $row["cate_slug"],
+                    "id" => $row["cate_id"],
+                ],
+            ]);
+        }
+        return $list;
+    }
+    public function findByCategorySlug($slug, $page)
+    {
+        $offset = ($page - 1) * 10;
+        $conn = Database::connect();
+        $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
+        INNER JOIN categories c ON c.id = p.category_id
+        WHERE c.slug = :slug AND p.hidden = 0 ORDER BY p.id DESC LIMIT 10 OFFSET :offset");
+        $stmt->bindParam(":slug", $slug, PDO::PARAM_INT);
+        $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = null;
+        $list = [];
+        foreach ($result as $row) {
+            array_push($list, [
+                "post" => Post::fromArray($row),
+                "category" => [
+                    "name" => $row["name"],
+                    "slug" => $row["cate_slug"],
+                    "id" => $row["cate_id"],
+                ],
             ]);
         }
         return $list;
@@ -57,7 +86,7 @@ class PostRepository
     {
         $offset = ($page - 1) * 10;
         $conn = Database::connect();
-        $stmt = $conn->prepare("SELECT p.*,c.name FROM posts p
+        $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
         INNER JOIN categories c ON c.id = p.category_id
         WHERE p.category_id = :category_id ORDER BY p.id DESC LIMIT 10 OFFSET :offset");
         $stmt->bindParam(":category_id", $category_id, PDO::PARAM_INT);
@@ -69,7 +98,11 @@ class PostRepository
         foreach ($result as $row) {
             array_push($list, [
                 "post" => Post::fromArray($row),
-                "category" => $row["name"],
+                "category" => [
+                    "name" => $row["name"],
+                    "slug" => $row["cate_slug"],
+                    "id" => $row["cate_id"],
+                ],
             ]);
         }
         return $list;
@@ -78,7 +111,7 @@ class PostRepository
     {
         $offset = ($page - 1) * 10;
         $conn = Database::connect();
-        $stmt = $conn->prepare("SELECT p.*,c.name FROM posts p
+        $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
         INNER JOIN categories c ON c.id = p.category_id
         WHERE p.hidden = 0 ORDER BY p.id DESC LIMIT 10 OFFSET :offset");
         $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
@@ -89,7 +122,11 @@ class PostRepository
         foreach ($result as $row) {
             array_push($list, [
                 "post" => Post::fromArray($row),
-                "category" => $row["name"],
+                "category" => [
+                    "name" => $row["name"],
+                    "slug" => $row["cate_slug"],
+                    "id" => $row["cate_id"],
+                ],
             ]);
         }
         return $list;
@@ -98,7 +135,7 @@ class PostRepository
     {
         $offset = ($page - 1) * 10;
         $conn = Database::connect();
-        $stmt = $conn->prepare("SELECT p.*,c.name FROM posts p
+        $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
         INNER JOIN categories c ON c.id = p.category_id
         ORDER BY p.id DESC LIMIT 10 OFFSET :offset");
         $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
@@ -109,7 +146,11 @@ class PostRepository
         foreach ($result as $row) {
             array_push($list, [
                 "post" => Post::fromArray($row),
-                "category" => $row["name"],
+                "category" => [
+                    "name" => $row["name"],
+                    "slug" => $row["cate_slug"],
+                    "id" => $row["cate_id"],
+                ],
             ]);
         }
         return $list;
@@ -117,7 +158,7 @@ class PostRepository
     public function findByPostId($postId)
     {
         $conn = Database::connect();
-        $stmt = $conn->prepare("SELECT p.*,c.name FROM posts p
+        $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
         INNER JOIN categories c ON c.id = p.category_id
         WHERE p.id = :id AND hidden = 0");
         $stmt->bindParam(":id", $postId, PDO::PARAM_INT);
@@ -127,7 +168,31 @@ class PostRepository
         if ($result) {
             return [
                 "post" => Post::fromArray($result),
-                "category" => $result["name"],
+                "category" =>[
+                    "name" => $result["name"],
+                    "slug" => $result["cate_slug"],
+                    "id" => $result["cate_id"],
+                ],
+            ];
+        }
+        return null;
+    }
+    public function findNewLeastRecentPosts(){
+        $conn = Database::connect();
+        $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
+        INNER JOIN categories c ON c.id = p.category_id
+        WHERE hidden = 0 ORDER BY p.id DESC");
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $conn = null;
+        if ($result) {
+            return [
+                "post" => Post::fromArray($result),
+                "category" =>[
+                    "name" => $result["name"],
+                    "slug" => $result["cate_slug"],
+                    "id" => $result["cate_id"],
+                ],
             ];
         }
         return null;
@@ -136,7 +201,7 @@ class PostRepository
     public function findByPostSlug($slug)
     {
         $conn = Database::connect();
-        $stmt = $conn->prepare("SELECT p.*,c.name FROM posts p
+        $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
         INNER JOIN categories c ON c.id = p.category_id
         WHERE p.slug = :slug AND hidden = 0");
         $stmt->bindParam(":slug", $slug, PDO::PARAM_STR);
@@ -146,7 +211,11 @@ class PostRepository
         if ($result) {
             return [
                 "post" => Post::fromArray($result),
-                "category" => $result["name"],
+                "category" => [
+                    "name" => $result["name"],
+                    "slug" => $result["cate_slug"],
+                    "id" => $result["cate_id"],
+                ],
             ];
         }
         return null;

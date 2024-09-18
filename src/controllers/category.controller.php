@@ -12,7 +12,7 @@ class CategoryController
             $data = [
                 "name" => htmlspecialchars($_POST["name"])
             ];
-            $cate = new Category(0, $data["name"]);
+            $cate = new Category(0, $data["name"],"");
             $result = $this->categoryRepo->save($cate);
             if ($result) {
                 return new Response(true, $cate, "Tạo thể loại thành công!.");

@@ -1,51 +1,21 @@
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php";
-Import::entities(["post.entity.php"]);
-Import::repositories(["post.repository.php"]);
 
-
-$postRepo = new PostRepository();
-$post = $postRepo->findNewLeastRecentPosts();
+$slug = null;
+if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
+    $slug  = htmlspecialchars($_GET["slug"]);
+}
 
 $_METADATA = [
-    "title" => "Trang chủ",
+    "title" => "Bài viết theo thể loại",
     "header-path" => "header/user-header.php"
 ];
 require Import::view_layout_path("content/content.php") ?>
-<!-- component -->
+
 <main class="container mx-auto md:px-10 px-4 mt-20">
-    <section>
-        <section class="bg-white ">
-            <div class="grid max-w-screen-xl px-4 pt-10 pb-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 lg:pt-28">
-                <?php if ($post != null): ?>
-                    <div class="mr-auto place-self-center lg:col-span-7" data-aos="fade-up">
-                        <h1
-                            class="max-w-2xl mb-4 text-4xl leading-none tracking-tight">
-                            <p class="font-bold md:text-5xl xl:text-6xl">Bài viết mới nhất</p>
-                            <a href="<?php echo Import::view_page_path("user/posts/details.php") . "?slug=" . $post["post"]->slug ?>" class="font-semibold hover:text-blue-500 md:text-4xl xl:text-5xl">
-                                <?php echo $post["post"]->title ?>
-                            </a>
-                        </h1>
-                        <p class="mb-4 text-gray-600">
-                            Ngày đăng: <?php
-                                        $created_at = new DateTime($post["post"]->created_at);
-                                        $date = $created_at->format("d-m-Y");
-                                        echo $date ?>
-                        </p>
-                        <a class="px-4 py-2 bg-gray-600 text-gray-100 font-bold rounded hover:bg-gray-500" href="<?php echo Import::view_page_path("user/posts/details.php") . "?slug=" . $post["post"]->slug ?>">Đọc</a>
-                    </div>
-                    <div class=" lg:mt-0 lg:col-span-5 lg:flex" data-aos="fade-up">
-                        <img src="https://demo.themesberg.com/landwind/images/hero.png" alt="hero image">
-                    </div>
-                <?php endif; ?>
-            </div>
-        </section>
-        <script async defer src="https://buttons.github.io/buttons.js"></script>
-        <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
-    </section>
     <section class="">
         <h1 class="text-2xl font-bold text-gray-800" data-aos="fade-up">Bài viết</h1>
-        <ul class="space-y-4 " id="root-posts" ></ul>
+        <ul class="space-y-4 " id="root-posts"></ul>
         <div class="flex justify-between md:justify-start gap-4 my-4" data-aos="fade-up">
             <button id="prevBtn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 flex items-center">
                 <i class="fas fa-chevron-left mr-2"></i> Previous
@@ -57,22 +27,23 @@ require Import::view_layout_path("content/content.php") ?>
         </div>
     </section>
 </main>
-
 <script>
-    function copy(content){
+    function copy(content) {
         navigator.clipboard.writeText(content).then(() => {
             alert('Đường dẫn đã được sao chép vào bộ nhớ tạm!');
         }).catch(err => {
             console.error('Không thể sao chép: ', err);
         });
     }
+
     function loadPosts(pageCurrent) {
         $.ajax({
             url: "<?php echo Import::route_path("post.route.php") ?>",
             method: "GET",
             data: {
-                action: "getAllWithPage",
-                page: pageCurrent
+                action: "getAllByCategorySlugAndPage",
+                page: pageCurrent,
+                slug: '<?php echo $slug?>'
             },
             success: (response) => {
                 const data = JSON.parse(response)

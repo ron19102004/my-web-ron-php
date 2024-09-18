@@ -4,14 +4,12 @@ Import::controllers(["auth.controller.php"]);
 class AuthRoute extends Route
 {
     private $authController;
-    public function __construct(){
+    public function __construct()
+    {
         $userRepository = new UserRepository();
         $this->authController = new AuthController($userRepository);
     }
-    public function get_action($action)
-    {
-      
-    }
+    public function get_action($action) {}
     public function post_action($action)
     {
         switch ($action) {
@@ -30,6 +28,12 @@ class AuthRoute extends Route
             case "logout": {
                     echo $this->authController
                         ->logout()
+                        ->toJson();
+                    break;
+                }
+            case "change_password": {
+                    echo $this->authController
+                        ->changePassword()
                         ->toJson();
                     break;
                 }

@@ -14,6 +14,12 @@ class PostRoute extends Route
     public function get_action($action)
     {
         switch ($action) {
+            case "getAllByCategorySlugAndPage": {
+                echo $this->postController
+                    ->getByCategorySlug()
+                    ->toJson();
+                break;
+            }
             case "getAllByCategoryIdAndPage": {
                     echo $this->postController
                         ->getByCategoryId()

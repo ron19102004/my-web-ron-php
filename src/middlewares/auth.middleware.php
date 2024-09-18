@@ -25,6 +25,9 @@ class AuthMiddleware{
         return true;
     }
     public static function hasRoles(array $roles){
+        if(!AuthMiddleware::isAuthenticated()){
+          return false;
+        }
         $roleCurrent = AuthMiddleware::getRoleCurrent();
         if (in_array($roleCurrent, $roles) == false) {
           return false;

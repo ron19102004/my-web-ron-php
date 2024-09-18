@@ -2,5 +2,10 @@
     require Import::view_layout_path($_METADATA["footer-path"]);
 } ?>
 </body>
+<script>
+    AOS.init({
+        duration: 1000,
+    })
+</script>
 
 </html>

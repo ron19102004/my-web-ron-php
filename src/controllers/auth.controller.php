@@ -67,4 +67,30 @@ class AuthController
         session_destroy();
         return new Response(true, null, "Đăng xuất thành công");
     }
+    public function changePassword(){
+        try {
+            $data = [
+                "currentPassword" => htmlspecialchars($_POST["currentPassword"]),
+                "newPassword" => password_hash(htmlspecialchars($_POST["newPassword"]), PASSWORD_DEFAULT),
+            ];
+            $userId = Session::get("user_id");
+            if (!$userId) {
+                return new Response(false, null, "Bạn chưa đăng nhập!");
+            }
+            $user = $this->userRepository->findById($userId);
+            if (!$user) {
+                return new Response(false, null, "Tài khoản không tồn tại!");
+            }
+            if (!password_verify($data["currentPassword"], $user->password)) {
+                return new Response(false, null, "Mật khẩu hiện tại không chính xác!");
+            }
+            $result = $this->userRepository->updatePassword($userId, $data["newPassword"]);
+            if ($result == false) {
+                return new Response(false, null, "Đổi mật khẩu thất bại!");
+            }
+            return new Response(true, null, "Đổi mật khẩu thành công!");
+        } catch (Exception $e) {
+            return new Response(false, $e->getMessage(), "Đổi mật khẩu thất bại!");
+        }
+    }
 }

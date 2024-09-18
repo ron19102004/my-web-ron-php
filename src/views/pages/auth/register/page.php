@@ -11,7 +11,7 @@ require Import::view_layout_path("content/content.php") ?>
 <div class="min-h-screen flex justify-center items-center bg-white">
     <div class="md:p-10 md:border-[1px] -mt-10 border-slate-200 rounded-md flex flex-col items-center space-y-3">
         <div class="py-8">
-            <img width="30" class="-mt-10" src="https://www.paypalobjects.com/images/shared/momgram@2x.png" />
+            <h1 class="text-3xl font-mono font-bold text-gray-800">Welcome</h1>
         </div>
         <input id="fullName" type="text" class="p-3 border-[1px] border-slate-500 rounded-sm w-80" placeholder="Tên đầy đủ" />
         <input id="username" type="text" class="p-3 border-[1px] border-slate-500 rounded-sm w-80" placeholder="Tên tài khoản" />

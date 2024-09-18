@@ -53,6 +53,17 @@ class PostController
             return new Response(false, null, $e->getMessage());
         }
     }
+    public function getByCategorySlug()
+    {
+        try {
+            $slug = htmlspecialchars($_GET["slug"]);
+            $page = htmlspecialchars($_GET["page"]);
+            $posts = $this->postRepo->findByCategorySlug($slug, $page);
+            return new Response(true, $posts, message: null);
+        } catch (Exception $e) {
+            return new Response(false, null, $e->getMessage());
+        }
+    }
     public function getByCategoryIdForAdmin()
     {
         try {
