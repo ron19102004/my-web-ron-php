@@ -15,11 +15,11 @@ class PostRoute extends Route
     {
         switch ($action) {
             case "getAllByCategorySlugAndPage": {
-                echo $this->postController
-                    ->getByCategorySlug()
-                    ->toJson();
-                break;
-            }
+                    echo $this->postController
+                        ->getByCategorySlug()
+                        ->toJson();
+                    break;
+                }
             case "getAllByCategoryIdAndPage": {
                     echo $this->postController
                         ->getByCategoryId()
@@ -47,6 +47,30 @@ class PostRoute extends Route
             case "getAllWithPageForAdmin": {
                     echo $this->postController
                         ->getAllForAdmin()
+                        ->toJson();
+                    break;
+                }
+            case "searchByTitleAndPage": {
+                    echo $this->postController
+                        ->searchByTitle()
+                        ->toJson();
+                    break;
+                }
+            case "searchByTitleAndPageAdmin": {
+                    echo $this->postController
+                        ->searchByTitle()
+                        ->toJson();
+                    break;
+                }
+            case "searchByTitleAndCategoryAndPageAdmin": {
+                    echo $this->postController
+                        ->searchByTitleAndCategoryIdForAdmin()
+                        ->toJson();
+                    break;
+                }
+            case "countPosts": {
+                    echo $this->postController
+                        ->countPosts()
                         ->toJson();
                     break;
                 }

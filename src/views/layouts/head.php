@@ -1,7 +1,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1157/1157109.png" type="png">
-<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/1157/1157109.png" type="png">
+<link rel="icon" href="<?php echo Env::get("root-path")."/src/views/assets/code.png"?>" type="png">
+<link rel="shortcut icon" href="<?php echo Env::get("root-path")."/src/views/assets/code.png"?>" type="png">
 <!-- tailwindcss cdn  -->
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- jquery -->
@@ -36,7 +36,6 @@ https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css
         }).showToast();
     }
 </script>
-
 <?php
 $_COLOR_DEF = [
     "black" => "#000000",
@@ -48,6 +47,6 @@ $_COLOR_DEF = [
 ];
 function isPageActive($page_path)
 {
-    return $_SERVER['REQUEST_URI'] == "/src/views/pages/" . $page_path;
+    return $_SERVER['REQUEST_URI'] == Env::get("root-path")."/src/views/pages/" . $page_path;
 }
 ?>

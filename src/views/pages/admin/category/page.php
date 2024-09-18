@@ -50,9 +50,10 @@ require Import::view_layout_path("content/content.php") ?>
                         <div class="w-full overflow-x-auto">
                             <table class="w-full">
                                 <thead>
-                                    <tr class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
+                                    <tr class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-200 uppercase border-b border-gray-600">
                                         <th class="px-4 py-3">ID</th>
                                         <th class="px-4 py-3">Tên</th>
+                                        <th class="px-4 py-3">Slug</th>
                                         <th class="px-4 py-3">Hành động</th>
                                     </tr>
                                 </thead>
@@ -64,6 +65,9 @@ require Import::view_layout_path("content/content.php") ?>
                                             </td>
                                             <td class="px-4 py-3 text-ms font-semibold border">
                                                 <?php echo $cate->name ?>
+                                            </td>
+                                            <td class="px-4 py-3 text-ms font-semibold border">
+                                                <?php echo $cate->slug ?>
                                             </td>
                                             <td class="px-4 py-3 text-xs border">
                                                 <button data-modal-target="default-modal-<?php echo $cate->id ?>" data-modal-toggle="default-modal-<?php echo $cate->id ?>" class="text-blue-400  underline pl-6" type="button">
@@ -151,6 +155,8 @@ require Import::view_layout_path("content/content.php") ?>
                 action: "update"
             },
             success: (response) => {
+                console.log(response);
+                
                 const data = JSON.parse(response)
                 if (data.status) {
                     toast("Cập nhật thành công", "green", 1500)

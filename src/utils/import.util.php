@@ -3,6 +3,7 @@ require "env.util.php";
 require "response.util.php";
 require "session.util.php";
 require "route.util.php";
+require "slug.util.php";
 require $_SERVER['DOCUMENT_ROOT'] . Env::get("root-path") . "/src/configs/database.config.php";
 require $_SERVER['DOCUMENT_ROOT'] . Env::get("root-path") . "/src/entities/user.entity.php";
 require $_SERVER['DOCUMENT_ROOT'] . Env::get("root-path") . "/src/repositories/user.repository.php";

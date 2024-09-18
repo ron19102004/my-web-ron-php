@@ -1,6 +1,6 @@
-<?php 
-if(!AuthMiddleware::hasRoles([UserRole::ADMIN])){
-    header("Location: ".Env::get("root-path")."/src/views/pages/auth/login/page.php");
+<?php
+if (!AuthMiddleware::hasRoles([UserRole::ADMIN])) {
+    header("Location: " . Env::get("root-path") . "/src/views/pages/auth/login/page.php");
     exit();
 }
 ?>
@@ -8,9 +8,12 @@ if(!AuthMiddleware::hasRoles([UserRole::ADMIN])){
 
 <div :class="sidebarOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'" class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-[<?php echo $_COLOR_DEF["blue"] ?>] lg:translate-x-0 lg:static lg:inset-0">
     <div class="flex items-center justify-center mt-8">
-        <div class="flex items-center">
+        <a href="<?php echo Env::get("root-path") ?>/" class="flex items-center justify-center">
+            <img class="object-cover w-10 h-10"
+                src="<?php echo Import::view_assets_path("code.png") ?>"
+                alt="Your avatar">
             <span class="mx-2 text-2xl font-semibold text-white">Quản lý</span>
-        </div>
+        </a>
     </div>
 
     <nav class="mt-10">
@@ -50,7 +53,7 @@ if(!AuthMiddleware::hasRoles([UserRole::ADMIN])){
                 success: function(response) {
                     const data = JSON.parse(response)
                     if (data.status) {
-                        window.location.href = "<?php echo Env::get("root-path")?>/";
+                        window.location.href = "<?php echo Env::get("root-path") ?>/";
                     } else {
                         toast("Đăng xuất thất bại!", "red", 1500)
                     }

@@ -1,6 +1,18 @@
 <?php
 class UserRepository
 {
+    public function countRole()
+    {
+        $conn = Database::connect();
+        $stmt = $conn->prepare(" SELECT 
+                                            COUNT(CASE WHEN role = 'ADMIN' THEN 1 END) AS admin_count,
+                                            COUNT(CASE WHEN role = 'USER' THEN 1 END) AS user_count
+                                        FROM users");
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $conn = null;
+        return $result;
+    }
     public function save(User $user)
     {
         $conn = Database::connect();

@@ -14,7 +14,7 @@ class PostController
                 "context" => htmlspecialchars($_POST["context"]),
                 "category_id" => htmlspecialchars($_POST["category_id"])
             ];
-            $post = new Post(0, $data["title"], $data["context"], $data["category_id"], "", 0,"");
+            $post = new Post(0, $data["title"], $data["context"], $data["category_id"], "", 0, "");
             $result = $this->postRepo->save($post);
             if ($result) {
                 return new Response(true, $post, "Tạo bài viết thành công!.");
@@ -24,7 +24,8 @@ class PostController
             return new Response(false, null, $e->getMessage());
         }
     }
-    public function getAll(){
+    public function getAll()
+    {
         try {
             $page = htmlspecialchars($_GET["page"]);
             $posts = $this->postRepo->find($page);
@@ -33,7 +34,8 @@ class PostController
             return new Response(false, null, $e->getMessage());
         }
     }
-    public function getAllForAdmin(){
+    public function getAllForAdmin()
+    {
         try {
             $page = htmlspecialchars($_GET["page"]);
             $posts = $this->postRepo->findForAdmin($page);
@@ -75,7 +77,8 @@ class PostController
             return new Response(false, null, $e->getMessage());
         }
     }
-    public function findById(){
+    public function findById()
+    {
         try {
             $id = htmlspecialchars($_GET["id"]);
             $post = $this->postRepo->findByPostId($id);
@@ -84,7 +87,8 @@ class PostController
             return new Response(false, null, $e->getMessage());
         }
     }
-    public function delete(){
+    public function delete()
+    {
         try {
             $id = htmlspecialchars($_POST["id"]);
             $result = $this->postRepo->delete($id);
@@ -96,11 +100,12 @@ class PostController
             return new Response(false, null, $e->getMessage());
         }
     }
-    public function hidden(){
+    public function hidden()
+    {
         try {
             $id = htmlspecialchars($_POST["id"]);
             $value = htmlspecialchars($_POST["value"]);
-            $result = $this->postRepo->hiddenPostUpdateById($id,$value);
+            $result = $this->postRepo->hiddenPostUpdateById($id, $value);
             if ($result) {
                 return new Response(true, null, "Ẩn bài viết thành công!");
             }
@@ -109,7 +114,8 @@ class PostController
             return new Response(false, null, $e->getMessage());
         }
     }
-    public function update(){
+    public function update()
+    {
         try {
             $data = [
                 "title" => htmlspecialchars($_POST["title"]),
@@ -117,11 +123,60 @@ class PostController
                 "category_id" => htmlspecialchars($_POST["category_id"]),
                 "id" => htmlspecialchars($_POST["id"])
             ];
-            $result = $this->postRepo->update($data["id"],$data["title"],$data["context"],$data["category_id"]);
+            $result = $this->postRepo->update($data["id"], $data["title"], $data["context"], $data["category_id"]);
             if ($result) {
                 return new Response(true, null, "Cập nhật bài viết thành công!");
             }
             return new Response(false, null, "Cập nhật bài viết thất bại!");
+        } catch (Exception $e) {
+            return new Response(false, null, $e->getMessage());
+        }
+    }
+    public function searchByTitleForAdmin()
+    {
+        try {
+            $title = htmlspecialchars($_GET["title"]);
+            $page = htmlspecialchars($_GET["page"]);
+            $posts = $this->postRepo->searchByTitleForAdmin($title, $page);
+            return new Response(true, $posts, message: null);
+        } catch (Exception $e) {
+            return new Response(false, null, $e->getMessage());
+        }
+    }
+    public function searchByTitle()
+    {
+        try {
+            $title = htmlspecialchars($_GET["title"]);
+            $page = htmlspecialchars($_GET["page"]);
+            $posts = $this->postRepo->searchByTitle($title, $page);
+            return new Response(true, $posts, message: null);
+        } catch (Exception $e) {
+            return new Response(false, null, $e->getMessage());
+        }
+    }
+    public function searchByTitleAndCategoryIdForAdmin()
+    {
+        try {
+            $title = htmlspecialchars($_GET["title"]);
+            $categoryId = (int) htmlspecialchars($_GET["category_id"]);
+            $page = htmlspecialchars($_GET["page"]);
+            $posts = null;
+            if ($categoryId != 0 && strlen($title) != 0) {
+                $posts = $this->postRepo->searchByTitleAndCategoryId($title, $categoryId, $page);
+            } else if ($categoryId != 0 && strlen($title) == 0) {
+                $posts = $this->postRepo->findByCategoryIdForAdmin($categoryId, $page);
+            } else {
+                $posts = $this->postRepo->searchByTitleForAdmin($title, $page);
+            }
+            return new Response(true, $posts, message: null);
+        } catch (Exception $e) {
+            return new Response(false, null, $e->getMessage());
+        }
+    }
+    public function countPosts(){
+        try {
+            $count = $this->postRepo->countPosts();
+            return new Response(true, $count, message: null);
         } catch (Exception $e) {
             return new Response(false, null, $e->getMessage());
         }

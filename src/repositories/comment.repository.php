@@ -16,4 +16,17 @@ class CommentRepository
         $conn = null;
         return $result;
     }
+    public function getCommentByPostId($post_id,$page){
+        $offset = ($page - 1) * 10;
+        $conn = Database::connect();
+        $stmt = $conn->prepare("SELECT c.*,u.fullName as fullName FROM comments c 
+        INNER JOIN users u ON c.user_id = u.id
+        WHERE c.post_id = :post_id LIMIT 10 OFFSET :offset");
+        $stmt->bindParam(":post_id", $post_id, PDO::PARAM_INT);
+        $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = null;
+        return $comments;
+    }
 }

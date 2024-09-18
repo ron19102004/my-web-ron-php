@@ -1,4 +1,4 @@
-<footer class="bg-gray-900 text-white py-8" data-aos="fade-up">
+<footer class="bg-gray-900 text-white py-8 mt-20 px-10" data-aos="fade-up">
     <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
 
         <!-- Brand / Logo -->

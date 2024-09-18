@@ -45,6 +45,9 @@
                     const data = JSON.parse(response)
                     if (data.status) {
                         toast("Thêm thành công", "green", 1500)
+                        setTimeout(() => {
+                            location.reload()
+                        }, 500)
                     } else {
                         toast("Thêm thất bại", "red", 1500)
                     }

@@ -1,7 +1,7 @@
 <?php
 require "../../../../utils/import.util.php";
-if(!AuthMiddleware::hasRoles([UserRole::ADMIN])){
-    header("Location: ".Env::get("root-path")."/src/views/pages/auth/login/page.php");
+if (!AuthMiddleware::hasRoles([UserRole::ADMIN])) {
+    header("Location: " . Env::get("root-path") . "/src/views/pages/auth/login/page.php");
     exit();
 }
 Import::entities(["category.entity.php", "post.entity.php"]);
@@ -21,7 +21,7 @@ if (isset($_GET["id"]) && !empty($_GET["id"])) {
 }
 
 $_METADATA = [
-    "title" => "Thêm bài viết",
+    "title" => "Cập nhật bài viết",
 ];
 require Import::view_layout_path("content/content.php") ?>
 <?php if ($post != null): ?>
@@ -31,11 +31,11 @@ require Import::view_layout_path("content/content.php") ?>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.js"></script>
 
-    <div class="mx-auto p-8 bg-white">
+    <div class="mx-auto p-8">
         <h1 class="text-5xl font-bold mb-8 text-gray-900 text-center">Cập nhật bài viết</h1>
         <form>
             <div class="mb-6">
-                <label for="title" class="block text-xl text-gray-700 font-semibold mb-2">Thể loại bài viết:</label>
+                <label for="title" class="block text-xl text-gray-800 font-semibold mb-2">Thể loại bài viết:</label>
                 <select name="cate" id="cate" class="w-full px-4 py-4 text-2xl border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300">
                     <option value="0" selected>Chọn danh mục</option>
                     <?php foreach ($cates as $cate) : ?>
@@ -46,13 +46,13 @@ require Import::view_layout_path("content/content.php") ?>
                 </select>
             </div>
             <div class="mb-6">
-                <label for="title" class="block text-xl text-gray-700 font-semibold mb-2">Tiêu đề bài viết:</label>
+                <label for="title" class="block text-xl text-gray-800 font-semibold mb-2">Tiêu đề bài viết:</label>
                 <input value="<?php echo $post->title ?>" type="text" id="title" name="title" required
                     class="w-full px-4 py-4 text-2xl border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300">
             </div>
 
             <div class="mb-8">
-                <label for="content" class="block text-xl text-gray-700 font-semibold mb-2">Nội dung bài viết:</label>
+                <label for="content" class="block text-xl text-gray-800 font-semibold mb-2">Nội dung bài viết:</label>
                 <textarea id="content" name="content" rows="12"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 resize-none"></textarea>
             </div>
@@ -68,7 +68,20 @@ require Import::view_layout_path("content/content.php") ?>
     <script>
         $(document).ready(function() {
             $('#content').summernote({
-                height: 400
+                height: 600, // Chiều cao của editor
+                toolbar: [
+                    // [groupName, [list of buttons]]
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ]
             });
             $('#content').summernote('code', `<?php echo htmlspecialchars_decode($post->context) ?>`);
             $("#btn-submit").click((e) => {
@@ -94,7 +107,7 @@ require Import::view_layout_path("content/content.php") ?>
                     data: data,
                     success: (response) => {
                         console.log(response);
-                        
+
                         const data = JSON.parse(response)
                         if (data.status) {
                             toast("Cập nhật thành công", "green", 1500)

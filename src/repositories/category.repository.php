@@ -1,16 +1,6 @@
 <?php
 class CategoryRepository
 {
-    private function createSlug($title) {
-        // Chuyển đổi tiêu đề thành chữ thường
-        $slug = strtolower($title);
-        // Thay thế các ký tự không phải chữ cái hoặc số bằng dấu gạch nối
-        $slug = preg_replace('/[^a-z0-9]+/', '-', $slug);
-        // Xóa các dấu gạch nối ở đầu và cuối chuỗi
-        $slug = trim($slug, '-');
-        $date = new DateTime();
-        return $slug."-".$date->getTimestamp();
-    }
     public function save(Category $category)
     {
         $conn = Database::connect();
@@ -18,7 +8,7 @@ class CategoryRepository
             "INSERT INTO `categories` (`id`, `name`,`slug`) 
             VALUES (NULL, :name,:slug);"
         );
-        $slug = $this->createSlug($category->name);
+        $slug = Slugify::slugify($category->name);
         $stmt->bindParam(":name", $category->name, PDO::PARAM_STR);
         $stmt->bindParam(":slug", $slug, PDO::PARAM_STR);
         $result = $stmt->execute();
@@ -51,7 +41,7 @@ class CategoryRepository
     public function update($id,$name){
         $conn = Database::connect();
         $stmt = $conn->prepare("UPDATE categories SET name=:name,slug=:slug WHERE id=:id");
-        $slug = $this->createSlug($name);
+        $slug = Slugify::slugify($name);
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->bindParam(":name", $name, PDO::PARAM_STR);
         $stmt->bindParam(":slug", $slug, PDO::PARAM_STR);

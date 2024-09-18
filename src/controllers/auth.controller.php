@@ -93,4 +93,12 @@ class AuthController
             return new Response(false, $e->getMessage(), "Đổi mật khẩu thất bại!");
         }
     }
+    public function countRole(){
+        try {
+            $count = $this->userRepository->countRole();
+            return new Response(true, $count, message: null);
+        } catch (Exception $e) {
+            return new Response(false, null, $e->getMessage());
+        }
+    }
 }

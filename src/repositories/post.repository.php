@@ -1,15 +1,13 @@
 <?php
 class PostRepository
 {
-    private function createSlug($title) {
-        // Chuyển đổi tiêu đề thành chữ thường
-        $slug = strtolower($title);
-        // Thay thế các ký tự không phải chữ cái hoặc số bằng dấu gạch nối
-        $slug = preg_replace('/[^a-z0-9]+/', '-', $slug);
-        // Xóa các dấu gạch nối ở đầu và cuối chuỗi
-        $slug = trim($slug, '-');
-        $date = new DateTime();
-        return $slug."-".$date->getTimestamp();
+    public function countPosts(){
+        $conn = Database::connect();
+        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM posts WHERE hidden = 0");
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $conn = null;
+        return $result['count'];
     }
     public function save(Post $post)
     {
@@ -22,7 +20,7 @@ class PostRepository
         $compressed_data = gzcompress($post->context);
         $encoded_data = base64_encode($compressed_data);
 
-        $slug = $this->createSlug($post->title);
+        $slug = Slugify::slugify($post->title);
 
         $stmt->bindParam(":title", $post->title, PDO::PARAM_STR);
         $stmt->bindParam(":context", $encoded_data, PDO::PARAM_STR);
@@ -64,7 +62,7 @@ class PostRepository
         $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
         INNER JOIN categories c ON c.id = p.category_id
         WHERE c.slug = :slug AND p.hidden = 0 ORDER BY p.id DESC LIMIT 10 OFFSET :offset");
-        $stmt->bindParam(":slug", $slug, PDO::PARAM_INT);
+        $stmt->bindParam(":slug", $slug, PDO::PARAM_STR);
         $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -168,7 +166,7 @@ class PostRepository
         if ($result) {
             return [
                 "post" => Post::fromArray($result),
-                "category" =>[
+                "category" => [
                     "name" => $result["name"],
                     "slug" => $result["cate_slug"],
                     "id" => $result["cate_id"],
@@ -177,7 +175,8 @@ class PostRepository
         }
         return null;
     }
-    public function findNewLeastRecentPosts(){
+    public function findNewLeastRecentPosts()
+    {
         $conn = Database::connect();
         $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
         INNER JOIN categories c ON c.id = p.category_id
@@ -188,7 +187,7 @@ class PostRepository
         if ($result) {
             return [
                 "post" => Post::fromArray($result),
-                "category" =>[
+                "category" => [
                     "name" => $result["name"],
                     "slug" => $result["cate_slug"],
                     "id" => $result["cate_id"],
@@ -197,7 +196,7 @@ class PostRepository
         }
         return null;
     }
-    
+
     public function findByPostSlug($slug)
     {
         $conn = Database::connect();
@@ -248,7 +247,7 @@ class PostRepository
         $compressed_data = gzcompress($context);
         $encoded_data = base64_encode($compressed_data);
 
-        $slug = $this->createSlug($title);
+        $slug = Slugify::slugify($title);
 
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->bindParam(":title", $title, PDO::PARAM_STR);
@@ -259,5 +258,111 @@ class PostRepository
         $result = $stmt->execute();
         $conn = null;
         return $result;
+    }
+    public function searchByTitle($title, $page)
+    {
+        $offset = ($page - 1) * 10;
+        $conn = Database::connect();
+        $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
+        INNER JOIN categories c ON c.id = p.category_id
+        WHERE p.title LIKE :title AND hidden = 0 ORDER BY p.id DESC LIMIT 10 OFFSET :offset");
+        $likeTile = "%" . $title . "%";
+        $stmt->bindParam(":title", $likeTile, PDO::PARAM_STR);
+        $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = null;
+        $list = [];
+        foreach ($result as $row) {
+            array_push($list, [
+                "post" => Post::fromArray($row),
+                "category" => [
+                    "name" => $row["name"],
+                    "slug" => $row["cate_slug"],
+                    "id" => $row["cate_id"],
+                ],
+            ]);
+        }
+        return $list;
+    }
+    public function searchByTitleForAdmin($title, $page)
+    {
+        $offset = ($page - 1) * 10;
+        $conn = Database::connect();
+        $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
+        INNER JOIN categories c ON c.id = p.category_id
+        WHERE p.title LIKE :title ORDER BY p.id DESC LIMIT 10 OFFSET :offset");
+        $likeTile = "%" . $title . "%";
+        $stmt->bindParam(":title", $likeTile, PDO::PARAM_STR);
+        $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = null;
+        $list = [];
+        foreach ($result as $row) {
+            array_push($list, [
+                "post" => Post::fromArray($row),
+                "category" => [
+                    "name" => $row["name"],
+                    "slug" => $row["cate_slug"],
+                    "id" => $row["cate_id"],
+                ],
+            ]);
+        }
+        return $list;
+    }
+    public function searchByTitleAndCategoryIdForAdmin($title, $cate_id, $page)
+    {
+        $offset = ($page - 1) * 10;
+        $conn = Database::connect();
+        $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
+        INNER JOIN categories c ON c.id = p.category_id
+        WHERE p.title  LIKE :title AND c.id = :cate_id ORDER BY p.id DESC LIMIT 10 OFFSET :offset");
+        $likeTile = "%" . $title . "%";
+        $stmt->bindParam(":title", $likeTile, PDO::PARAM_STR);
+        $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam(":cate_id", $cate_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = null;
+        $list = [];
+        foreach ($result as $row) {
+            array_push($list, [
+                "post" => Post::fromArray($row),
+                "category" => [
+                    "name" => $row["name"],
+                    "slug" => $row["cate_slug"],
+                    "id" => $row["cate_id"],
+                ],
+            ]);
+        }
+        return $list;
+    }
+    public function searchByTitleAndCategoryId($title, $cate_id, $page)
+    {
+        $offset = ($page - 1) * 10;
+        $conn = Database::connect();
+        $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
+        INNER JOIN categories c ON c.id = p.category_id
+        WHERE p.title  LIKE :title AND c.id = :cate_id AND hidden = 0 ORDER BY p.id DESC LIMIT 10 OFFSET :offset");
+        $likeTile = "%" . $title . "%";
+        $stmt->bindParam(":title", $likeTile, PDO::PARAM_STR);
+        $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam(":cate_id", $cate_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = null;
+        $list = [];
+        foreach ($result as $row) {
+            array_push($list, [
+                "post" => Post::fromArray($row),
+                "category" => [
+                    "name" => $row["name"],
+                    "slug" => $row["cate_slug"],
+                    "id" => $row["cate_id"],
+                ],
+            ]);
+        }
+        return $list;
     }
 }

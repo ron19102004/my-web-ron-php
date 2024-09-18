@@ -20,7 +20,7 @@ require Import::view_layout_path("content/content.php") ?>
                         </svg>
                     </button>
                     <div class="relative mx-4 lg:mx-0">
-                        <h1 class="font-semibold md:text-2xl text-[<?php echo $_COLOR_DEF["red"]?>]">
+                        <h1 class="font-semibold md:text-2xl text-[<?php echo $_COLOR_DEF["red"] ?>]">
                             Dashboard
                         </h1>
                     </div>
@@ -31,7 +31,7 @@ require Import::view_layout_path("content/content.php") ?>
                         <button @click="dropdownOpen = ! dropdownOpen"
                             class="relative block w-8 h-8 overflow-hidden rounded-full shadow focus:outline-none">
                             <img class="object-cover w-full h-full"
-                                src="https://images.unsplash.com/photo-1528892952291-009c663ce843?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=296&amp;q=80"
+                                src="<?php echo Import::view_assets_path("code.png") ?>"
                                 alt="Your avatar">
                         </button>
 
@@ -41,21 +41,117 @@ require Import::view_layout_path("content/content.php") ?>
                         <div x-show="dropdownOpen"
                             class="absolute right-0 z-10 w-48 mt-2 overflow-hidden bg-white rounded-md shadow-xl"
                             style="display: none;">
-                            <a href="#"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Profile</a>
-                            <a href="#"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Products</a>
-                            <a href="#"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Logout</a>
+                            <a href="<?php echo Env::get("root-path") ?>/"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">
+                                Thoát khỏi trình quản lý
+                            </a>
                         </div>
                     </div>
                 </div>
             </header>
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
-
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 ">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-6">
+                    <div>
+                        <canvas id="countRole"></canvas>
+                    </div>
+                    <div>
+                        <canvas id="countPosts"></canvas>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
 </div>
+<!-- countRole -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('countRole');
+    const roleChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Admin', 'Người dùng'],
+            datasets: [{
+                label: 'Số lượng',
+                data: [12, 19],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 
+    function loadCountRoleChart() {
+        $.ajax({
+            url: "<?php echo Import::route_path("auth.route.php") ?>",
+            method: "GET",
+            data: {
+                action: "countRole",
+            },
+            success: (response) => {
+                const data = JSON.parse(response)
+                if (data.status) {
+                    console.log(data);
+                    roleChart.data.datasets[0].data = [
+                        data.data.admin_count,
+                        data.data.user_count
+                    ]
+                    roleChart.update()
+                }
+            },
+        })
+    }
+    loadCountRoleChart()
+</script>
+<!-- countPosts -->
+<script>
+    const ctx2 = document.getElementById('countPosts');
+    const postChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: ['Bài viết'],
+            datasets: [{
+                label: 'Số lượng',
+                data: [12],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    function loadCountPostChart() {
+        $.ajax({
+            url: "<?php echo Import::route_path("post.route.php") ?>",
+            method: "GET",
+            data: {
+                action: "countPosts",
+            },
+            success: (response) => {
+                const data = JSON.parse(response)
+                if (data.status) {
+                    console.log(data);
+                    postChart.data.datasets[0].data = [
+                        data.data,
+                    ]
+                    postChart.update()
+                }
+            },
+        })
+    }
+    loadCountPostChart()
+</script>
 <?php require Import::view_layout_path("content/end-content.php") ?>

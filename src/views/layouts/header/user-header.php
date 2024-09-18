@@ -8,16 +8,17 @@ $cates = $cateRepo->find();
 
 <nav class="bg-white md:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 ">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="<?php echo Env::get("root-path")?>/" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <a href="<?php echo Env::get("root-path") ?>/" class="flex items-center space-x-3 rtl:space-x-reverse">
+            <img src="<?php echo Import::view_assets_path("code.png") ?>" alt="logo" class="w-10 h-10">
             <span class="self-center text-2xl font-semibold whitespace-nowrap md:text-white ">Ron</span>
         </a>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <?php if (AuthMiddleware::isAuthenticated()): ?>
-                <button id="logout" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <button id="logout" class="text-white bg-[#0070BA] hover:bg-blue-800  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center ">
                     Đăng xuất
                 </button>
             <?php else: ?>
-                <a href="<?php echo Import::view_page_path("auth/login/page.php")?>" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <a href="<?php echo Import::view_page_path("auth/login/page.php") ?>" class="text-white bg-[#0070BA] hover:bg-blue-800  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center">
                     Đăng nhập
                 </a>
             <?php endif; ?>
@@ -32,11 +33,11 @@ $cates = $cateRepo->find();
                 <li>
                     <a href="<?php echo Import::view_page_path("user/home/page.php") ?>"
                         class="block py-2 px-3 rounded md:bg-transparent md:p-0 
-                    <?php echo (isPageActive("user/home/page.php") ? " text-blue-700" : "text-white hover:text-blue-700") ?>
+                    <?php echo (isPageActive("user/home/page.php") ? " text-blue-500" : "text-white hover:text-blue-700") ?>
                     " aria-current="page">Trang chủ</a>
                 </li>
                 <li>
-                    <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class=" py-2 px-3 rounded md:bg-transparent md:p-0 text-white hover:text-blue-700 flex items-center" type="button">Thể loại<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class=" py-2 px-3 rounded md:bg-transparent md:p-0 text-white hover:text-blue-500 flex items-center" type="button">Thể loại<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
                         </svg>
                     </button>
@@ -55,7 +56,7 @@ $cates = $cateRepo->find();
                 <li>
                     <a href="<?php echo Import::view_page_path("user/profile/page.php") ?>"
                         class="block py-2 px-3  rounded md:bg-transparent md:p-0 
-                    <?php echo (isPageActive("user/profile/page.php") ? " text-blue-700" : "text-white hover:text-blue-700") ?>
+                    <?php echo (isPageActive("user/profile/page.php") ? " text-blue-500" : "text-white hover:text-blue-700") ?>
                     " aria-current="page">Tài khoản</a>
                 </li>
             </ul>
@@ -74,7 +75,7 @@ $cates = $cateRepo->find();
                 success: function(response) {
                     const data = JSON.parse(response)
                     if (data.status) {
-                        window.location.href = "<?php echo Env::get("root-path")?>/";
+                        window.location.href = "<?php echo Env::get("root-path") ?>/";
                     } else {
                         toast("Đăng xuất thất bại!", "red", 1500)
                     }
