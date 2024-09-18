@@ -1,7 +1,7 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php";
+require $_SERVER['DOCUMENT_ROOT'] . "/ron/src/utils/import.util.php";
 if (!AuthMiddleware::isAuthenticated()) {
-    header("Location: /src/views/pages/auth/login/page.php");
+    header("Location: /ron/src/views/pages/auth/login/page.php");
     exit();
 }
 $userRepo = new UserRepository();

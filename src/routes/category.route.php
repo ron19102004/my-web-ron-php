@@ -1,5 +1,5 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php";
+require $_SERVER['DOCUMENT_ROOT'] . "/ron/src/utils/import.util.php";
 Import::entities(["category.entity.php"]);
 Import::repositories(["category.repository.php"]);
 Import::controllers(["category.controller.php"]);

@@ -1,6 +1,6 @@
 <?php 
 if(!AuthMiddleware::hasRoles([UserRole::ADMIN->name])){
-    header("Location: /src/views/pages/auth/login/page.php");
+    header("Location: /ron/src/views/pages/auth/login/page.php");
     exit();
 }
 ?>
