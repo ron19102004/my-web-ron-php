@@ -36,10 +36,9 @@ if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
                 <?php echo htmlspecialchars_decode($post["post"]->context) ?>
             </div>
             <!-- comment form -->
-            <div class="" data-aos="fade-up">
+            <div class="mt-4" data-aos="fade-up">
                 <h1 class="font-bold text-4xl">Bình luận</h1>
-                <div id="show-cmt" class="overflow-y-auto max-h-svh">
-
+                <div id="show-cmt" class="overflow-y-auto max-h-svh mt-4">
                 </div>
                 <div class="w-full bg-white rounded-lg p-4 my-4 border border-gray-200">
                     <h2 class="text-gray-800 text-xl font-semibold mb-4" id="cmt-box-title">Thêm bình luận</h2>
@@ -216,10 +215,9 @@ if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
                         action: "new",
                         post_id: <?php echo $post["post"]->id; ?>,
                         content: $("#comment-box").val(),
-                        user_id: <?php echo Session::get("user_id"); ?>,
                         reply_to: replyCommentId
                     },
-                    success: (response) => {                        
+                    success: (response) => {                                                
                         const data = JSON.parse(response);
                         if (data.status) {
                             $("#comment-box").val("");

@@ -26,9 +26,14 @@ class CommentRoute extends Route
     {
         switch ($action) {
             case "new": {
-                    echo $this->commentController
-                        ->add()
-                        ->toJson();
+                    if (AuthMiddleware::isAuthenticated()) {
+                        echo $this->commentController
+                            ->add()
+                            ->toJson();
+                    } else {
+                        $res = new Response(false, null, "Yêu cầu đăng nhập");
+                        echo $res->toJson();
+                    }
                     break;
                 }
         }

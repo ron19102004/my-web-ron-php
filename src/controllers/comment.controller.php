@@ -11,14 +11,13 @@ class CommentController
         try {
             $data = [
                 "post_id" => htmlspecialchars($_POST["post_id"]),
-                "user_id" => htmlspecialchars($_POST["user_id"]),
                 "content" => htmlspecialchars($_POST["content"]),
                 "reply_to" => htmlspecialchars($_POST["reply_to"]),
             ];
             $comment = new Comment(
                 0,
                 $data["post_id"],
-                $data["user_id"],
+                Session::get("user_id"),
                 $data["reply_to"] == 0 ? null : $data["reply_to"],
                 $data["content"],
                 0

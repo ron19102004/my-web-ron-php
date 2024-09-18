@@ -9,14 +9,15 @@ class AuthRoute extends Route
         $userRepository = new UserRepository();
         $this->authController = new AuthController($userRepository);
     }
-    public function get_action($action) {
+    public function get_action($action)
+    {
         switch ($action) {
             case "countRole": {
-                echo $this->authController
-                    ->countRole()
-                    ->toJson();
-                break;
-            }
+                    echo $this->authController
+                        ->countRole()
+                        ->toJson();
+                    break;
+                }
         }
     }
     public function post_action($action)
@@ -41,9 +42,14 @@ class AuthRoute extends Route
                     break;
                 }
             case "change_password": {
-                    echo $this->authController
-                        ->changePassword()
-                        ->toJson();
+                    if (AuthMiddleware::isAuthenticated()) {
+                        echo $this->authController
+                            ->changePassword()
+                            ->toJson();
+                    } else {
+                       $res = new Response(false,null,"Yêu cầu đăng nhập");
+                       echo $res->toJson();
+                    }
                     break;
                 }
         }

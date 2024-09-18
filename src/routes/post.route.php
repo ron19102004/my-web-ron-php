@@ -80,27 +80,50 @@ class PostRoute extends Route
     {
         switch ($action) {
             case "new": {
-                    echo $this->postController
-                        ->add()
-                        ->toJson();
+                    if (AuthMiddleware::hasRoles([UserRole::ADMIN])) {
+                        echo $this->postController
+                            ->add()
+                            ->toJson();
+                    } else {
+                        $res = new Response(false, null, "Không có quyền truy cập");
+                        echo $res->toJson();
+                    }
                     break;
                 }
             case "delete": {
-                    echo $this->postController
-                        ->delete()
-                        ->toJson();
+                    if (AuthMiddleware::hasRoles([UserRole::ADMIN])) {
+                        echo $this->postController
+                            ->delete()
+                            ->toJson();
+                    } else {
+                        $res = new Response(false, null, "Không có quyền truy cập");
+                        echo $res->toJson();
+                    }
+
                     break;
                 }
             case "update": {
-                    echo $this->postController
-                        ->update()
-                        ->toJson();
+                    if (AuthMiddleware::hasRoles([UserRole::ADMIN])) {
+                        echo $this->postController
+                            ->update()
+                            ->toJson();
+                    } else {
+                        $res = new Response(false, null, "Không có quyền truy cập");
+                        echo $res->toJson();
+                    }
+
+
                     break;
                 }
             case "hidden-post-update": {
-                    echo $this->postController
-                        ->hidden()
-                        ->toJson();
+                    if (AuthMiddleware::hasRoles([UserRole::ADMIN])) {
+                        echo $this->postController
+                            ->hidden()
+                            ->toJson();
+                    } else {
+                        $res = new Response(false, null, "Không có quyền truy cập");
+                        echo $res->toJson();
+                    }
                     break;
                 }
         }

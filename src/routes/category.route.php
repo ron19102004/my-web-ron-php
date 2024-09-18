@@ -16,21 +16,37 @@ class CategoryRoute extends Route
     {
         switch ($action) {
             case "new": {
-                    echo $this->cateController
-                        ->add()
-                        ->toJson();
+                    if (AuthMiddleware::hasRoles([UserRole::ADMIN])) {
+                        echo $this->cateController
+                            ->add()
+                            ->toJson();
+                    } else {
+                        $res = new Response(false, null, "Không có quyền truy cập");
+                        echo $res->toJson();
+                    }
                     break;
                 }
             case "delete": {
-                    echo $this->cateController
-                        ->delete()
-                        ->toJson();
+                    if (AuthMiddleware::hasRoles([UserRole::ADMIN])) {
+                        echo $this->cateController
+                            ->delete()
+                            ->toJson();
+                    } else {
+                        $res = new Response(false, null, "Không có quyền truy cập");
+                        echo $res->toJson();
+                    }
+
                     break;
                 }
             case "update": {
-                    echo $this->cateController
-                        ->update()
-                        ->toJson();
+                    if (AuthMiddleware::hasRoles([UserRole::ADMIN])) {
+                        echo $this->cateController
+                            ->update()
+                            ->toJson();
+                    } else {
+                        $res = new Response(false, null, "Không có quyền truy cập");
+                        echo $res->toJson();
+                    }
                     break;
                 }
         }

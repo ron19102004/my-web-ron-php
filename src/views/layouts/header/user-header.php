@@ -18,8 +18,8 @@ $cates = $cateRepo->find();
                     Đăng xuất
                 </button>
             <?php else: ?>
-                <a href="<?php echo Import::view_page_path("auth/login/page.php") ?>" class="text-white bg-[#0070BA] hover:bg-blue-800  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center">
-                    Đăng nhập
+                <a href="<?php echo Import::view_page_path("auth/login/page.php") ?>" class="text-white bg-[#0070BA] hover:bg-blue-800  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center flex flex-col justify-center items-center">
+                    <span>Đăng nhập</span>
                 </a>
             <?php endif; ?>
             <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
