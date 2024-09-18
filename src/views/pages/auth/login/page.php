@@ -1,19 +1,21 @@
 <?php
 require "../../../../utils/import.util.php";
 
-if(AuthMiddleware::isAuthenticated()){
-    header("Location: ".Env::get("root-path")."/src/views/pages/user/home/page.php");
+if (AuthMiddleware::isAuthenticated()) {
+    header("Location: " . Env::get("root-path") . "/src/views/pages/user/home/page.php");
 }
 
 $_METADATA = [
     "title" => "Đăng nhập",
-    "header-path"=>"header/auth-header.php"
 ];
 require Import::view_layout_path("content/content.php") ?>
 <!-- component -->
 <div class="min-h-screen flex justify-center items-center bg-white">
     <div class="p-10 md:border-[1px] -mt-10 border-slate-200 rounded-md flex flex-col items-center space-y-3">
-        <div class="py-8">
+        <div class="py-8 flex flex-col justify-center items-center">
+            <a href="<?php echo Env::get("root-path") ?>/" class="text-3xl flex justify-start items-center">
+                <img src="<?php echo Import::view_assets_path("code.png") ?>" alt="logo" class="w-10 h-10">
+            </a>
             <h1 class="text-3xl font-bold text-[#0070ba]">Welcome</h1>
         </div>
         <input id="username" type="text" class="p-3 border-[1px] border-slate-500 rounded-sm w-80" placeholder="E-Mail or Phone number" />
@@ -44,10 +46,10 @@ require Import::view_layout_path("content/content.php") ?>
                 method: "POST",
                 data: data,
                 success: (data) => {
-                    
+
                     const res = JSON.parse(data);
                     if (res.status) {
-                        window.location.href = "<?php echo Env::get("root-path")?>/";
+                        window.location.href = "<?php echo Env::get("root-path") ?>/";
                     }
                     toast(res.message, res.status ? "green" : "red", 1500)
                 }

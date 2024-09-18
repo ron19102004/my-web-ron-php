@@ -16,7 +16,7 @@ require Import::view_layout_path("content/content.php") ?>
 
 <!-- component -->
 <div class="flex flex-col justify-center items-center mt-20 mb-4">
-    <div class="relative flex flex-col items-center rounded-lg w-full max-w-4xl mx-auto bg-white shadow-lg p-6 border border-gray-200 ">
+    <div class="relative flex flex-col items-center rounded-lg w-full max-w-4xl mx-auto bg-white md:shadow-lg p-6 md:border border-gray-200 ">
         <div class="w-full mb-8">
             <h4 class="text-2xl font-bold text-gray-800  ">
                 Thông tin cá nhân
