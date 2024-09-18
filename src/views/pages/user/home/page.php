@@ -9,7 +9,8 @@ $post = $postRepo->findNewLeastRecentPosts();
 
 $_METADATA = [
     "title" => "Trang chủ",
-    "header-path" => "header/user-header.php"
+    "header-path" => "header/user-header.php",
+    "footer-path"=> "footer/user-footer.php"
 ];
 require Import::view_layout_path("content/content.php") ?>
 <!-- component -->

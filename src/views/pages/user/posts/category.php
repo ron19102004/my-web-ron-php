@@ -8,7 +8,8 @@ if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
 
 $_METADATA = [
     "title" => "Bài viết theo thể loại",
-    "header-path" => "header/user-header.php"
+    "header-path" => "header/user-header.php",
+     "footer-path"=> "footer/user-footer.php"
 ];
 require Import::view_layout_path("content/content.php") ?>
 

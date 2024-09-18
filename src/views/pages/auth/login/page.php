@@ -46,7 +46,7 @@ require Import::view_layout_path("content/content.php") ?>
                     
                     const res = JSON.parse(data);
                     if (res.status) {
-                        window.location.href = "/ron";
+                        window.location.href = "<?php echo Env::get("root-path")?>/";
                     }
                     toast(res.message, res.status ? "green" : "red", 1500)
                 }

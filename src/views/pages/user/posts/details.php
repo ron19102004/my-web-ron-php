@@ -5,7 +5,8 @@ Import::repositories(["post.repository.php"]);
 
 $_METADATA = [
     "title" => "Thêm bài viết",
-    "header-path" => "header/user-header.php"
+    "header-path" => "header/user-header.php",
+    "footer-path" => "footer/user-footer.php"
 ];
 require Import::view_layout_path("content/content.php");
 
@@ -36,7 +37,7 @@ if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
             </div>
         </div>
         <div id="posts" class="md:basis-1/5">
-            <h1 class="font-semibold text-xl" data-aos="fade-left">Các bài viết liên quan</h1>
+            <h1 class="font-semibold text-xl" data-aos="fade-up">Các bài viết liên quan</h1>
             <ul class="space-y-2" id="root-posts"></ul>
         </div>
     </section>
@@ -66,7 +67,7 @@ if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
                             });
                             const decodedContext = $('<div/>').html(post.context).text();
                             return `
-                        <div class="max-w-4xl p-2 bg-white rounded-lg hover:shadow border-2 border-gray-200 transition duration-300 ease-in-out space-y-1" data-aos="fade-left">
+                        <div class="max-w-4xl p-2 bg-white rounded-lg hover:shadow border-2 border-gray-200 transition duration-300 ease-in-out space-y-1" data-aos="fade-up">
                             <div class="flex justify-between items-center">
                                 <span class="font-light text-gray-600">${date_show}</span>
                             </div>
