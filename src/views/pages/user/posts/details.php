@@ -36,12 +36,20 @@ if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
                 <?php echo htmlspecialchars_decode($post["post"]->context) ?>
             </div>
         </div>
-        <div id="posts" class="md:basis-1/5">
+        <div id="posts" class="md:basis-1/5 ">
             <h1 class="font-semibold text-xl" data-aos="fade-up">Các bài viết liên quan</h1>
-            <ul class="space-y-2" id="root-posts"></ul>
+            <ul class="space-y-2 py-2" id="root-posts"></ul>
+            <div class="block md:hidden text-center my-4">
+                <button id="load-more" class="text-blue-600 underline font-semibold">
+                    Xem thêm
+                </button>
+            </div>
         </div>
     </section>
     <script>
+        let pageCurrent = 1;
+        let postsLoaded = false;
+
         function loadPosts(pageCurrent) {
             $.ajax({
                 url: "<?php echo Import::route_path("post.route.php") ?>",
@@ -52,44 +60,55 @@ if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
                     "category_id": <?php echo $post["category"]["id"]; ?>
                 },
                 success: (response) => {
-                    const data = JSON.parse(response)
-                    console.log(data);
+                    const data = JSON.parse(response);
 
                     if (data.status) {
-                        $("#root-posts").html(data.data.map((item, index) => {
+                        const postItems = data.data.map((item, index) => {
                             const post = item.post;
-                            const category = item.category;
                             const date = new Date(post.created_at);
                             const date_show = date.toLocaleDateString('en-US', {
                                 year: 'numeric',
                                 month: 'short',
                                 day: 'numeric'
                             });
-                            const decodedContext = $('<div/>').html(post.context).text();
+
                             return `
-                        <div class="max-w-4xl p-2 bg-white rounded-lg hover:shadow border-2 border-gray-200 transition duration-300 ease-in-out space-y-1" data-aos="fade-up">
-                            <div class="flex justify-between items-center">
-                                <span class="font-light text-gray-600">${date_show}</span>
-                            </div>
-                            <div class="">
-                                <a class="text-xl text-gray-700 font-semibold hover:text-gray-600" href="<?php echo Import::view_page_path("user/posts/details.php") ?>?slug=${post.slug}">
-                                    ${post.title}
-                                </a>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <a class="text-blue-600 hover:underline" href="<?php echo Import::view_page_path("user/posts/details.php") ?>?slug=${post.slug}">Đọc</a>
-                            </div>
-                        </div>
-                        `
-                        }))
+                            <div class="max-w-4xl p-2 bg-white rounded-lg hover:shadow border-2 border-gray-200 transition duration-300 ease-in-out space-y-1 ${index >= 1 ? 'hidden md:block' : ''}" data-aos="fade-up">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-light text-gray-600">${date_show}</span>
+                                </div>
+                                <div class="">
+                                    <a class="text-xl text-gray-700 font-semibold hover:text-gray-600" href="<?php echo Import::view_page_path("user/posts/details.php") ?>?slug=${post.slug}">
+                                        ${post.title}
+                                    </a>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <a class="text-blue-600 hover:underline" href="<?php echo Import::view_page_path("user/posts/details.php") ?>?slug=${post.slug}">Đọc</a>
+                                </div>
+                            </div>`;
+                        });
+
+                        $("#root-posts").html(postItems);
+
+                        if (!postsLoaded && data.data.length > 1) {
+                            $("#load-more").show();
+                        } else {
+                            $("#load-more").hide();
+                        }
                     }
-                },
-            })
+                }
+            });
         }
-        let pageCurrent = 1;
+
         $(() => {
             loadPosts(pageCurrent);
-        })
+
+            $("#load-more").on("click", () => {
+                postsLoaded = true;
+                $("#root-posts").children(".hidden").removeClass("hidden");
+                $("#load-more").hide();
+            });
+        });
     </script>
 <?php else: ?>
 <?php endif; ?>
