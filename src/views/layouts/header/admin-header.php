@@ -1,6 +1,6 @@
 <?php 
 if(!AuthMiddleware::hasRoles([UserRole::ADMIN])){
-    header("Location: /ron/src/views/pages/auth/login/page.php");
+    header("Location: ".Env::get("root-path")."/src/views/pages/auth/login/page.php");
     exit();
 }
 ?>

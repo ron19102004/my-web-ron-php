@@ -1,7 +1,7 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . "/ron/src/utils/import.util.php";
+require "../../../../utils/import.util.php";
 if (AuthMiddleware::isAuthenticated()) {
-    header("Location: /ron/src/views/pages/user/home/page.php");
+    header("Location: ".Env::get("root-path")."/src/views/pages/user/home/page.php");
 }
 $_METADATA = [
     "title" => "Đăng ký",

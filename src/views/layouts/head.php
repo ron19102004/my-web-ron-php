@@ -1,5 +1,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1157/1157109.png" type="png">
+<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/1157/1157109.png" type="png">
 <!-- tailwindcss cdn  -->
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- jquery -->
@@ -20,7 +22,7 @@ https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" integrity="sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" integrity="sha512-1cK78a1o+ht2JcaW6g8OXYwqpev9+6GqOkz9xmBN9iUUhIndKtxwILGWYOSibOKjLsEdjyjZvYDq/cZwNeak0w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script>
-    function toast(message,bgColor,timeout) {
+    function toast(message, bgColor, timeout) {
         Toastify({
             text: message,
             duration: timeout,
@@ -39,12 +41,13 @@ https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css
 $_COLOR_DEF = [
     "black" => "#000000",
     "blue" => "#111827",
-    "red"=> "#bb2033",
-    "gray"=> "#E5E5E5",
-    "white"=> "#FFFFFF",
-    "yellow"=> "#fed014"
+    "red" => "#bb2033",
+    "gray" => "#E5E5E5",
+    "white" => "#FFFFFF",
+    "yellow" => "#fed014"
 ];
-function isPageActive($page_path){
-    return $_SERVER['REQUEST_URI'] == "/src/views/pages/".$page_path;
+function isPageActive($page_path)
+{
+    return $_SERVER['REQUEST_URI'] == "/src/views/pages/" . $page_path;
 }
 ?>

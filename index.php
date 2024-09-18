@@ -1,4 +1,8 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . "/ron/src/utils/import.util.php";
+require "./src/utils/import.util.php";
 // Import::migration("create-table.migration.php");
-header("Location: /ron/src/views/pages/user/home/page.php");
+header("Location: ".Env::get("root-path")."/src/views/pages/user/home/page.php");
+
+// Những thứ cần chỉnh sửa lên vps 
+// đường dẫn ở file env.util.php
+// file env.json

@@ -1,5 +1,5 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . "/ron/src/utils/import.util.php";
+require "../../../../utils/import.util.php";
 
 $slug = null;
 if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
