@@ -28,14 +28,6 @@ require Import::view_layout_path("content/content.php") ?>
             <a href="../register/page.php" class="text-center w-full border-blue-900 hover:border-[#003087] hover:border-[2px] border-[1px] rounded-3xl p-3 text-[#0070ba] font-bold transition duration-200">Sign Up</a>
         </div>
     </div>
-
-    <div class="absolute bottom-0 w-full p-3 bg-[#F7F9FA] flex justify-center items-center space-x-3 text-[14px] font-medium text-[#666]">
-        <a href="https://www.paypal.com/us/smarthelp/contact-us" target="_blank" class="hover:underline underline-offset-1 cursor-pointer">Contact Us</a>
-        <a href="https://www.paypal.com/de/webapps/mpp/ua/privacy-full" target="_blank" class="hover:underline underline-offset-1 cursor-pointer">Privacy</a>
-        <a href="https://www.paypal.com/de/webapps/mpp/ua/legalhub-full" target="_blank" class="hover:underline underline-offset-1 cursor-pointer">Legal</a>
-        <a href="https://www.paypal.com/de/webapps/mpp/ua/upcoming-policies-full" target="_blank" class="hover:underline underline-offset-1 cursor-pointer">Policy </a>
-        <a href="https://www.paypal.com/de/webapps/mpp/country-worldwide" target="_blank" class="hover:underline underline-offset-1 cursor-pointer">Worldwide </a>
-    </div>
 </div>
 <script>
     $(() => {
@@ -51,9 +43,10 @@ require Import::view_layout_path("content/content.php") ?>
                 method: "POST",
                 data: data,
                 success: (data) => {
+                    
                     const res = JSON.parse(data);
                     if (res.status) {
-                        window.location.href = "/";
+                        window.location.href = "/ron";
                     }
                     toast(res.message, res.status ? "green" : "red", 1500)
                 }

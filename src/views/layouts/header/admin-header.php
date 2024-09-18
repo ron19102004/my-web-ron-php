@@ -50,7 +50,7 @@ if(!AuthMiddleware::hasRoles([UserRole::ADMIN])){
                 success: function(response) {
                     const data = JSON.parse(response)
                     if (data.status) {
-                        window.location.href = "/";
+                        window.location.href = "/ron";
                     } else {
                         toast("Đăng xuất thất bại!", "red", 1500)
                     }

@@ -50,7 +50,7 @@ class AuthController
                 $data["password"],
                 $data["email"],
                 $data["fullName"],
-                UserRole::USER->name,
+                UserRole::USER,
                 $data["phone"]
             );
             $result = $this->userRepository->save($user);
