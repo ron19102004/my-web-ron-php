@@ -86,7 +86,7 @@ require Import::view_layout_path("content/content.php") ?>
                         });
                         const decodedContext = $('<div/>').html(post.context).text();
                         return `
-                        <div class="max-w-4xl p-2 bg-white rounded-lg hover:shadow border border-gray-200 transition duration-300 ease-in-out space-y-1" data-aos="fade-up">
+                        <div class="max-w-4xl p-2 bg-white rounded-lg hover:shadow border border-gray-100 transition duration-300 ease-in-out space-y-1" data-aos="fade-up">
                             <div class="flex justify-between items-center">
                                 <span class="font-light text-gray-600">${date_show}</span>
                             </div>

@@ -162,7 +162,7 @@ class PostController
             $page = htmlspecialchars($_GET["page"]);
             $posts = null;
             if ($categoryId != 0 && strlen($title) != 0) {
-                $posts = $this->postRepo->searchByTitleAndCategoryId($title, $categoryId, $page);
+                $posts = $this->postRepo->searchByTitleAndCategoryIdForAdmin($title, $categoryId, $page);
             } else if ($categoryId != 0 && strlen($title) == 0) {
                 $posts = $this->postRepo->findByCategoryIdForAdmin($categoryId, $page);
             } else {
@@ -177,6 +177,17 @@ class PostController
         try {
             $count = $this->postRepo->countPosts();
             return new Response(true, $count, message: null);
+        } catch (Exception $e) {
+            return new Response(false, null, $e->getMessage());
+        }
+    }
+    public function searchByTitleCategorySlug(){
+        try {
+            $slug = htmlspecialchars($_GET["slug"]);
+            $page = htmlspecialchars($_GET["page"]);
+            $title = htmlspecialchars($_GET["title"]);
+            $posts = $this->postRepo->searchByTitleAndCategorySlug($title, $slug,$page);
+            return new Response(true, $posts, message: null);
         } catch (Exception $e) {
             return new Response(false, null, $e->getMessage());
         }

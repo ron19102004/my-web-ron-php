@@ -44,6 +44,18 @@ class AuthController
                 "fullName" => htmlspecialchars($_POST["fullName"]),
                 "phone" => htmlspecialchars($_POST["phone"]),
             ];
+            $userByEmail = $this->userRepository->findByEmail($data["email"]);
+            if ($userByEmail) {
+                return new Response(false, null, "Email đã tồn tại!");
+            }
+            $userByPhone = $this->userRepository->findByPhone($data["phone"]);
+            if ($userByPhone) {
+                return new Response(false, null, "Số điện thoại đã tồn tại!");
+            }
+            $userByUsername = $this->userRepository->findByUsername($data["username"]);
+            if ($userByUsername) {
+                return new Response(false, null, "Tên đăng nhập đã tồn tại!");
+            }
             $user = new User(
                 0,
                 $data["username"],
@@ -67,7 +79,8 @@ class AuthController
         session_destroy();
         return new Response(true, null, "Đăng xuất thành công");
     }
-    public function changePassword(){
+    public function changePassword()
+    {
         try {
             $data = [
                 "currentPassword" => htmlspecialchars($_POST["currentPassword"]),
@@ -93,12 +106,41 @@ class AuthController
             return new Response(false, $e->getMessage(), "Đổi mật khẩu thất bại!");
         }
     }
-    public function countRole(){
+    public function countRole()
+    {
         try {
             $count = $this->userRepository->countRole();
             return new Response(true, $count, message: null);
         } catch (Exception $e) {
             return new Response(false, null, $e->getMessage());
+        }
+    }
+    public function updateInfo()
+    {
+        try {
+            $data = [
+                "fullName" => htmlspecialchars($_POST["fullName"]),
+                "phone" => htmlspecialchars($_POST["phone"]),
+                "email" => htmlspecialchars($_POST["email"]),
+            ];
+            $user = $this->userRepository->findById(Session::get("user_id"));
+            if (!$user) {
+                return new Response(false, null, "Bạn chưa đăng nhập!");
+            }
+            if ($user->email!= $data["email"] && $this->userRepository->findByEmail($data["email"])) {
+                return new Response(false, null, "Email đã tồn tại!");
+            }
+            if ($user->phone!= $data["phone"] && $this->userRepository->findByPhone($data["phone"])) {
+                return new Response(false, null, "Số điện thoại đã tồn tại!");
+            }
+            $userUpdate = new User($user->id, $user->username, $user->password, $data["email"], $data["fullName"], $user->role, $data["phone"]);
+            $result = $this->userRepository->updateInformation($userUpdate);
+            if ($result == false) {
+                return new Response(false, null, "Cập nhật thông tin thất bại!");
+            }
+            return new Response(true, null, "Cập nhật thông tin thành công!");
+        } catch (Exception $e) {
+            return new Response(false, $e->getMessage(), "Cập nhật thông tin thất bại!");
         }
     }
 }

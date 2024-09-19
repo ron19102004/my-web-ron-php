@@ -42,11 +42,11 @@ $cates = $cateRepo->find();
                         </svg>
                     </button>
                     <!-- Dropdown menu -->
-                    <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                    <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 ">
+                        <ul class="py-2 text-sm text-gray-700 " aria-labelledby="dropdownDefaultButton">
                             <?php foreach ($cates as $cate): ?>
                                 <li>
-                                    <a href="<?php echo Import::view_page_path("user/posts/category.php") . "?slug=" . $cate->slug ?>" class="block px-4 py-2 hover:bg-gray-700  dark:hover:text-white hover:underline"><?php echo $cate->name ?></a>
+                                    <a href="<?php echo Import::view_page_path("user/posts/category.php") . "?slug=" . $cate->slug ?>" class="block px-4 py-2 hover:underline"><?php echo $cate->name ?></a>
                                 </li>
                             <?php endforeach; ?>
                         </ul>

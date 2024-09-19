@@ -23,7 +23,7 @@ class UserRepository
         $stmt->bindParam(":username", $user->username, PDO::PARAM_STR);
         $stmt->bindParam(":email", $user->email, PDO::PARAM_STR);
         $stmt->bindParam(":password", $user->password, PDO::PARAM_STR);
-        $stmt->bindParam(":fullName", $user->role, PDO::PARAM_STR);
+        $stmt->bindParam(":fullName", $user->fullName, PDO::PARAM_STR);
         $stmt->bindParam(":phone", $user->phone, PDO::PARAM_STR);
         $result = $stmt->execute();
         $conn =  null;
@@ -89,5 +89,21 @@ class UserRepository
         $conn = null;
         return $result;
     }
-    
+    public function updateInformation(User $user){
+        $conn = Database::connect();
+        $stmt = $conn->prepare(
+            "UPDATE `users` SET
+            `fullName` = :fullName, 
+            `phone` = :phone ,
+            `email` = :email
+            WHERE `id` = :id;"
+        );
+        $stmt->bindParam(":fullName", $user->fullName, PDO::PARAM_STR);
+        $stmt->bindParam(":phone", $user->phone, PDO::PARAM_STR);
+        $stmt->bindParam(":id", $user->id, PDO::PARAM_INT);
+        $stmt->bindParam(":email", $user->email, PDO::PARAM_STR);
+        $result = $stmt->execute();
+        $conn = null;
+        return $result;
+    }
 }

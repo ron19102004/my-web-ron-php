@@ -70,7 +70,7 @@ require Import::view_layout_path("content/content.php") ?>
                 ['table', ['table']],
                 ['insert', ['link', 'picture', 'video']],
                 ['view', ['fullscreen', 'codeview', 'help']]
-            ]
+            ],
         });
         // $('#content').summernote('code', "<h1>hi</h1>");
         $("#btn-submit").click((e) => {

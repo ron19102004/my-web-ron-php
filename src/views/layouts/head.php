@@ -1,7 +1,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="<?php echo Env::get("root-path")."/src/views/assets/code.png"?>" type="png">
-<link rel="shortcut icon" href="<?php echo Env::get("root-path")."/src/views/assets/code.png"?>" type="png">
+<link rel="icon" href="<?php echo Env::get("root-path") . "/src/views/assets/code.png" ?>" type="png">
+<link rel="shortcut icon" href="<?php echo Env::get("root-path") . "/src/views/assets/code.png" ?>" type="png">
 <!-- tailwindcss cdn  -->
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- jquery -->
@@ -47,6 +47,44 @@ $_COLOR_DEF = [
 ];
 function isPageActive($page_path)
 {
-    return $_SERVER['REQUEST_URI'] == Env::get("root-path")."/src/views/pages/" . $page_path;
+    return $_SERVER['REQUEST_URI'] == Env::get("root-path") . "/src/views/pages/" . $page_path;
 }
 ?>
+<style>
+    /* CSS repository cho tất cả thẻ <pre> */
+    pre {
+        /* Khoảng cách bên trong */
+        border-radius: 0.24rem;
+        /* Bo góc để trông mềm mại hơn */
+        /* Cỡ chữ dễ đọc */
+        font-family: "Consolas", Courier, monospace;
+        /* Sử dụng font chữ phù hợp cho mã nguồn */
+        white-space: pre-wrap;
+        /* Đảm bảo nội dung trong <pre> tự xuống dòng */
+        word-wrap: break-word;
+        /* Phá vỡ từ nếu từ quá dài */
+        max-width: 100%;
+        /* Giới hạn chiều rộng của thẻ <pre> để không vượt quá màn hình */
+        overflow-x: auto;
+        /* Thêm thanh cuộn ngang nếu nội dung quá dài */
+    }
+
+    /* Đối với mã nguồn trong thẻ pre */
+    pre code {
+        display: block;
+        /* Đảm bảo mã nguồn hiển thị dạng block */
+        color: #333;
+        /* Màu chữ */
+        font-size: inherit;
+        /* Thừa kế cỡ chữ từ thẻ <pre> */
+        overflow-x: auto;
+        /* Thêm thanh cuộn nếu cần */
+    }
+
+    /* Nếu muốn phần mã có thể copy dễ dàng mà không bị ảnh hưởng bởi các khoảng trắng không cần thiết */
+    pre,
+    code {
+        user-select: text;
+        /* Cho phép chọn văn bản */
+    }
+</style>

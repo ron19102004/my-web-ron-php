@@ -68,6 +68,12 @@ class PostRoute extends Route
                         ->toJson();
                     break;
                 }
+            case "searchByTitleAndCategorySlugAndPage": {
+                    echo $this->postController
+                        ->searchByTitleCategorySlug()
+                        ->toJson();
+                    break;
+                }
             case "countPosts": {
                     echo $this->postController
                         ->countPosts()

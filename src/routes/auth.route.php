@@ -47,8 +47,19 @@ class AuthRoute extends Route
                             ->changePassword()
                             ->toJson();
                     } else {
-                       $res = new Response(false,null,"Yêu cầu đăng nhập");
-                       echo $res->toJson();
+                        $res = new Response(false, null, "Yêu cầu đăng nhập");
+                        echo $res->toJson();
+                    }
+                    break;
+                }
+            case "update_info": {
+                    if (AuthMiddleware::isAuthenticated()) {
+                        echo $this->authController
+                            ->updateInfo()
+                            ->toJson();
+                    } else {
+                        $res = new Response(false, null, "Yêu cầu đăng nhập");
+                        echo $res->toJson();
                     }
                     break;
                 }

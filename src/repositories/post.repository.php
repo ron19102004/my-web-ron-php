@@ -365,4 +365,31 @@ class PostRepository
         }
         return $list;
     }
+    public function searchByTitleAndCategorySlug($title, $slug, $page)
+    {
+        $offset = ($page - 1) * 10;
+        $conn = Database::connect();
+        $stmt = $conn->prepare("SELECT p.*,c.name,c.slug as cate_slug,c.id as cate_id FROM posts p
+        INNER JOIN categories c ON c.id = p.category_id
+        WHERE p.title  LIKE :title AND c.slug = :slug AND hidden = 0 ORDER BY p.id DESC LIMIT 10 OFFSET :offset");
+        $likeTile = "%" . $title . "%";
+        $stmt->bindParam(":title", $likeTile, PDO::PARAM_STR);
+        $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam(":slug", $slug, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = null;
+        $list = [];
+        foreach ($result as $row) {
+            array_push($list, [
+                "post" => Post::fromArray($row),
+                "category" => [
+                    "name" => $row["name"],
+                    "slug" => $row["cate_slug"],
+                    "id" => $row["cate_id"],
+                ],
+            ]);
+        }
+        return $list;
+    }
 }

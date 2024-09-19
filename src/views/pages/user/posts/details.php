@@ -3,12 +3,7 @@ require "../../../../utils/import.util.php";
 Import::entities(["post.entity.php"]);
 Import::repositories(["post.repository.php"]);
 
-$_METADATA = [
-    "title" => "Bài viết",
-    "header-path" => "header/user-header.php",
-    "footer-path" => "footer/user-footer.php"
-];
-require Import::view_layout_path("content/content.php");
+
 
 $slug = null;
 $post = null;
@@ -17,8 +12,14 @@ if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
     $postRepo = new PostRepository();
     $post = $postRepo->findByPostSlug($slug);
 }
-?>
 
+$_METADATA = [
+    "title" => $post != null ? $post["post"]->title : "Bài viết",
+    "header-path" => "header/user-header.php",
+    "footer-path" => "footer/user-footer.php"
+];
+require Import::view_layout_path("content/content.php");
+?>
 <?php if ($post != null): ?>
     <section class="md:flex md:gap-4 container mx-auto md:px-10 px-4 mt-20">
         <div class="md:flex-1">
@@ -40,7 +41,7 @@ if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
                 <h1 class="font-bold text-4xl">Bình luận</h1>
                 <div id="show-cmt" class="overflow-y-auto max-h-svh mt-4">
                 </div>
-                <div class="w-full bg-white rounded-lg p-4 my-4 border border-gray-200">
+                <div class="w-full bg-white rounded-lg p-4 my-4 border border-gray-100">
                     <h2 class="text-gray-800 text-xl font-semibold mb-4" id="cmt-box-title">Thêm bình luận</h2>
                     <div class="w-full">
                         <!-- Textarea -->
@@ -95,7 +96,7 @@ if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
                             });
 
                             return `
-                            <div class="max-w-4xl p-2 bg-white rounded-lg hover:shadow border-2 border-gray-200 transition duration-300 ease-in-out space-y-1 ${index >= 1 ? ' hidden md:block ' : ''}">
+                            <div class="max-w-4xl p-2 bg-white rounded-lg hover:shadow border border-gray-100 transition duration-300 ease-in-out space-y-1 ${index >= 1 ? ' hidden md:block ' : ''}">
                                 <div class="flex justify-between items-center">
                                     <span class="font-light text-gray-600">${date_show}</span>
                                 </div>
@@ -207,7 +208,7 @@ if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
                 if ($("#comment-box").val().length === 0) {
                     alert("Vui lòng nhập nội dung bình luận!");
                     return false;
-                }                
+                }
                 $.ajax({
                     url: "<?php echo Import::route_path("comment.route.php") ?>",
                     method: "POST",
@@ -217,7 +218,7 @@ if (isset($_GET["slug"]) && !empty($_GET["slug"])) {
                         content: $("#comment-box").val(),
                         reply_to: replyCommentId
                     },
-                    success: (response) => {                                                
+                    success: (response) => {
                         const data = JSON.parse(response);
                         if (data.status) {
                             $("#comment-box").val("");
